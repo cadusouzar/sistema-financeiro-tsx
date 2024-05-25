@@ -90,6 +90,9 @@ export const TransactionPanel: React.FC<PropsTransactionPanel> = ({ selectedButt
       try {
         const response = await api.get(`/conta/dados-conta-transacoes?idUsuario=${userData?.id}`);
         const dadosContaTransacoes: DadosContaTransacoes = response.data;
+
+        dadosContaTransacoes.transacoes.sort((a, b) => new Date(b.dataTransacao).getTime() - new Date(a.dataTransacao).getTime());
+
         setSaldoUsuarioLogado(dadosContaTransacoes.saldo);
         setTransacoes(dadosContaTransacoes.transacoes);
       } catch (error) {
@@ -263,10 +266,10 @@ export const TransactionPanel: React.FC<PropsTransactionPanel> = ({ selectedButt
             <div className="flex flex-col ml-1 mr-1 gap-y-1">
                 {transacoes.map((transacao) => (
                   <div key={transacao.id} className="flex flex-col rounded-lg items-center justify-center w-full h-10 mt-1 bg-white">
-                    {transacao.idConta == userData?.id ? 
+                    {transacao.idConta != userData?.id ? 
                       <>
                         <h1 className="text-gray-500 text-xl">
-                          <span className="text-green-600">Transação recebida</span> | Valor: {formatarSaldo(transacao.valor)} | Data: {formatarData(transacao.dataTransacao)} | Conta remetente: {transacao.contaDestino}
+                          <span className="text-green-600">Transação recebida</span> | Valor: {formatarSaldo(transacao.valor)} | Data: {formatarData(transacao.dataTransacao)} | Conta remetente: {transacao.idConta}
                         </h1>
                       </>
                       :

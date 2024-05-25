@@ -11,37 +11,39 @@ import { RootState } from 'services/redux/store';
 import { logoutUser } from 'services/redux/actions';
 
 export const NavBar: React.FC = () => {
-  const userData = useSelector((state: RootState) => state.auth.userData)
+  const userData = useSelector((state: RootState) => state.auth.userData);
   const [isOpen, setIsOpen] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
 
-  function logOut(){
-      dispatch(logoutUser())
-      //@ts-ignore
-      navigation.navigate('Login')
+  function logOut() {
+    dispatch(logoutUser());
+    //@ts-ignore
+    navigation.navigate('Login');
   }
 
-  function nomeCompleto(name:string) {
-    if(name){
+  function nomeCompleto(name: string) {
+    if (name) {
       const nomes = name.split(' ');
-    
+
       const letrasFormatadas = nomes.map((nome) => {
         return nome.charAt(0).toUpperCase() + nome.slice(1).toLowerCase();
       });
-    
+
       const nomeFormatado = letrasFormatadas.join(' ');
       return nomeFormatado;
     }
+    return '';
   }
 
-  function formatCPF(cpf:string) {
+  function formatCPF(cpf: string) {
+    if (!cpf) return '';
     const numericCPF = cpf.replace(/\D/g, '');
 
     const formattedCPF = numericCPF
       .replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, '$1.$2.$3-$4');
-  
+
     return formattedCPF;
   }
 
@@ -72,15 +74,15 @@ export const NavBar: React.FC = () => {
   return (
     <div className='relative'>
       <div className='xl:h-screen xl:rounded-r-3xl xl:max-w-80 xl:justify-start min-h-24 xl:flex-col xl:shadow-custom flex items-center justify-between p-4 bg-panel-primary'>
-        <Icons Icon={isMenuOpen ? IoClose : IoMenu} onClick={() => {toggleDropDown(); toggleMenuIcon();}} className='xl:hidden'/>
+        <Icons Icon={isMenuOpen ? IoClose : IoMenu} onClick={() => { toggleDropDown(); toggleMenuIcon(); }} className='xl:hidden' />
         <Icons 
           Icon={MdAccountCircle} 
           className='xl:mt-12' 
           size={windowWidth > 1280 ? '140px' : '70px'}
         />
         <div className='xl:flex xl:flex-col xl:gap-y-7 hidden'>
-          <h1 className='text-white text-2xl font-montserrat text-center'>{nomeCompleto(userData?.nome)}</h1>
-          <h1 className='text-white text-2xl font-montserrat text-center'>{formatCPF(userData?.cpf)}</h1>
+          <h1 className='text-white text-2xl font-montserrat text-center'>{nomeCompleto(userData?.nome || '')}</h1>
+          <h1 className='text-white text-2xl font-montserrat text-center'>{formatCPF(userData?.cpf || '')}</h1>
           <div className='xl:flex xl:flex-col hidden'>
             <LinkTo to='/transacoes'>
               <ButtonText text='Home' icon={IoHome} onClick={closeDropDown} marginTop='mt-12'/>
