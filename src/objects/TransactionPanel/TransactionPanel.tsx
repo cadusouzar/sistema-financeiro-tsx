@@ -145,8 +145,28 @@ export const TransactionPanel: React.FC<PropsTransactionPanel> = ({ selectedButt
     
       const quantidadeNumerica = parseInt(quantidade);
       const precoNumerico = parseFloat(precoUnitario);
+      
+      if(!dataVencimento){
+        alert('Selecione uma data de vencimento')
+      }
+      if(!endereçoEmitente){
+        alert('Preencha o endereço para continuar')
+      }
+      if(!descricaoItem){
+        alert('Descreva o item para continuar')
+      }
+      if(!quantidadeNumerica){
+        alert('Descreva a quantidade de itens para continuar')
+      }
+      if(!precoNumerico){
+        alert('Descreva preço de cada item para continuar')
+      }
+      if(!status){
+        alert('Selecione o status da fatura para continuar')
+      }
 
     try{
+      
       const url = "/conta/fatura";
       const requestBody = {
         dataFatura: dataFaturaFormatada,
